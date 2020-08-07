@@ -1,6 +1,4 @@
-<script type="text/javascript"
-src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
+
 
 ## Welcome to GitHub Pages
 
@@ -41,4 +39,6 @@ Your Pages site will use the layout and styles from the Jekyll theme you have se
 Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
 
 
-$J(\pi_{\theta}) = E_{\pi_{\theta}}[R(\tau)]$
+```latex
+J(\pi_{\theta}) = E_{\pi_{\theta}}[R(\tau)]$
+```
