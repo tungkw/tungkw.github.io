@@ -1,5 +1,5 @@
 theme: jekyll-theme-cayman
-markdown: kramdown
+# markdown: kramdown
 # kramdown:
   # math-engine: katex
   # math-engine: mathjax
