@@ -10,11 +10,12 @@
     </script>
 </head>
 
-<!-- # Blog -->
+# Blog
 
 $a = b$
+
 $$
 b = c
 $$
 
- <!-- [Kalmam Filtering](blog/kalman_filtering.md) -->
+ [Kalmam Filtering](blog/kalman_filtering.md)
