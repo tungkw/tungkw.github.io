@@ -1,11 +1,11 @@
 
-<script type="text/javascript" id="MathJax-script" async
+<!-- <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
-</script>
+</script> -->
 
-testing 124
+testing 125
 
-When \\(a \\ne 0\\)$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+When \\(a \\ne 0\\), there are two solutions to \(ax^2 + bx + c = 0\) and they are
 
 $$
 \begin{equation}
