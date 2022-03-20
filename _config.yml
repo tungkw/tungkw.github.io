@@ -1,4 +1,4 @@
 theme: jekyll-theme-cayman
 markdown: kramdown
-# plugins:
-#   - jekyll-katex
+plugins:
+  - jekyll-katex
