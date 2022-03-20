@@ -4,22 +4,21 @@
 </script> -->
 
 
-testing 132
+testing 133
 
 When \\( a \ne 0 \\), there are two solutions to \\( ax^2 + bx + c = 0 \\) and they are
+When $$a \ne 0$$, there are two solutions to $$ax^2 + bx + c = 0$$ and they are
 
 $$
-\begin{equation}
 \begin{aligned}
 x &= {-b \pm \sqrt{b^2-4ac} \over 2a}. \\
 &=testing
 \end{aligned}
-\end{equation}
 $$
 
 katex
 
-$a \ne 0$, $10$ 20
+$a \ne 0$, $10$, 20
 
 $$ 
 \begin{aligned}
