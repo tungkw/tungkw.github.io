@@ -1,4 +1,6 @@
 theme: jekyll-theme-cayman
 markdown: kramdown
-plugins:
-  - jekyll-katex
+kramdown:
+  math-engine: mathjax
+# plugins:
+#   - jekyll-katex
