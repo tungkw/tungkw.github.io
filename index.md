@@ -1,5 +1,5 @@
 
-<script type="text/javascript" id="MathJax-script" async
+<!-- <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js">
 </script>
 <script type="text/x-mathjax-config">
@@ -9,11 +9,23 @@
         inlineMath: [['$','$']]
         }
     });
-</script>
+</script> -->
+
+<head>
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+    <script type="text/x-mathjax-config">
+        MathJax.Hub.Config({
+            tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre'],
+            inlineMath: [['$','$']]
+            }
+        });
+    </script>
+</head>
 
 
 
-testing 143
+testing 144
 
 When \\( a \ne 0 \\), there are two solutions to \\( ax^2 + bx + c = 0 \\) and they are
 
