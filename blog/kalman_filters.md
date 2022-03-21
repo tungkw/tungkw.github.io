@@ -19,14 +19,14 @@ $$
 将$s_k$和$L$合并成$x_k$
 
 $$
-p(x_k | O_{0:k}, A_{0:k}, x_0)
+p(x_k | O_{0:k}, A_{0:k}, x_0) \sim \mathcal{N} (\mu_k, \Sigma_k)
 $$
 
 # 推导
 
 ## Bayes定理
 
-最新观测下的后验概率，转为求最新观测的似然$\times$先验概率
+最新观测下的后验概率，转为求最新观测的似然 $\times$ 先验概率
 
 $$
 \begin{aligned}
@@ -35,17 +35,11 @@ $$
 \end{aligned}
 $$
 
-## 观测独立
+## 先验概率
 
-每次观测独立，且和动作无关
+### 马尔科夫性
 
-$$
-p(z_k | Z_{0:k}, U_{0:k}, x_k, x_0) = p(z_k | x_k)
-$$
-
-## 马尔科夫性
-
-以$k-1$时刻状态的条件概率展开
+以$k-1$时刻状态的条件概率展开先验概率
 
 $$
 p(x_k | Z_{0:k-1}, U_{0:k}, x_0) = \int p(x_k | x_{k-1}, Z_{0:k-1}, U_{0:k}, x_0) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1}
@@ -58,14 +52,134 @@ p(x_k | x_{k-1}, Z_{0:k-1}, U_{0:k}, x_0) = p(x_k | u_k, x_{k-1})
 $$
 
 
-## 边缘高斯分布
-
-联合概率 $p(a,b) \sim \mathcal{N}(\mu = [\mu_a; \mu_b], \Sigma = [\Sigma_{aa}, \Sigma_{ab}; \Sigma_{ba}, \Sigma_{bb}])$
-
-则有边缘分布 $p(a) = \int p(a \vert b) \cdot p(b) \mathrm{d}b \sim \mathcal{N}(\mu_a, \Sigma_{aa})$
+### 高斯线性运动模型（预测）
 
 $$
-p(x_k | Z_{0:k-1}, U_{0:k}, x_0) = \int p(x_k | u_k, x_{k-1}) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1}
+x_k = A^x_k x_{k-1} + u_k + b^x_k
+$$
+
+使用均值作为前一时刻状态的估计 $x_{k-1} = \mu_{k-1}$
+
+$$
+\begin{aligned}
+x_k =& A^x_k \mu_{k-1} + u_k + b^x_k \\
+\sim& \mathcal{N} (A^x_k \mu_{k-1} + u_k, A^x_k \Sigma_{k-1} {A^x_k}^T + \Sigma^{b^x}) \\
+=& \mathcal{N} (\check{\mu}_k, \check{\Sigma}_k)
+\end{aligned} 
+$$
+
+则先验概率的积分中第一部分和$x_{k-1}$无关
+
+$$
+\begin{aligned}
+p(x_k | Z_{0:k-1}, U_{0:k}, x_0) &= \int p(x_k | u_k, x_{k-1}) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1} \\
+&= p(x_k | u_k, x_{k-1}) \int p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1} \\
+&= p(x_k | u_k, x_{k-1})
+\end{aligned}
+$$
+
+
+## 似然
+
+### 观测独立
+
+每次观测独立，且和动作无关
+
+$$
+p(z_k | Z_{0:k}, U_{0:k}, x_k, x_0) = p(z_k | x_k)
+$$
+
+### 高斯线性观测模型
+
+$$
+\begin{aligned}
+z_k =& A^z_k x_k + b^z_k \\
+\sim& \mathcal{N} (A^z_k x_k, \Sigma^{b^z})
+\end{aligned}
+$$
+
+
+## 后验概率
+
+两个高斯的乘积仍为高斯
+
+$$
+\begin{aligned}
+& p(x_k | Z_{0:k}, U_{0:k}, x_0) \\
+\propto \ & p(z_k | x_k) \cdot p(x_k | u_k, x_{k-1})
+\end{aligned} 
+$$
+
+配平两边指数部分
+
+$$
+\begin{aligned}
+&(x_k - \mu_k)^T \Sigma^{-1}_k (x_k - \mu_k) \\
+=& (z_k - A^z_k x_k)^T (\Sigma^{b^z})^{-1} (z_k - A^z_k x_k) \\
++& (x_k - \check{\mu}_{k-1})^T \check{\Sigma}_k^{-1} (x_k - \check{\mu}_{k-1})
+\end{aligned}
+$$
+
+### 二次项系数有
+
+$$
+\Sigma^{-1}_k = {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \check{\Sigma}_k^{-1}
+$$
+
+设
+
+$$
+\begin{aligned}
+K =& \Sigma_k {A^z_k}^T (\Sigma^{b^z})^{-1} \\
+(woodbury\ identity) =& \check{\Sigma}_k {A^z_k}^T (A^z_k \check{\Sigma}_k {A^z_k}^T + \Sigma^{b^z})^{-1}
+\end{aligned}
+$$
+
+则有
+
+$$
+\begin{aligned}
+\Sigma^{-1}_k &= {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \check{\Sigma}_k^{-1} \\
+
+I &= \Sigma_k {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \Sigma_k \check{\Sigma}_k^{-1} \\
+
+I &= K A^z_k + \Sigma_k \check{\Sigma}_k^{-1} \\
+
+\Sigma_k &= (I - K A^z_k) \check{\Sigma}_k
+\end{aligned}
+$$
+
+### 一次项系数
+
+$$
+\begin{aligned}
+- \mu_k^T \Sigma^{-1}_k x_k 
+=& - z_k^T (\Sigma^{b^z})^{-1} A^z_k x_k - \check{\mu}_{k-1}^T \check{\Sigma}_k^{-1} x_k \\
+
+\Sigma^{-1}_k \mu_k =& {A^z_k}^T (\Sigma^{b^z})^{-1} z_k + \check{\Sigma}_k^{-1} \check{\mu}_{k-1} \\
+
+\mu_k =& \Sigma_k {A^z_k}^T (\Sigma^{b^z})^{-1} z_k + \Sigma_k \check{\Sigma}_k^{-1} \check{\mu}_{k-1} \\
+
+\mu_k =& K z_k + (I - K A^z_k)\check{\mu}_{k-1} \\
+
+\mu_k =& \check{\mu}_{k-1} + K (z_k - A^z_k \check{\mu}_{k-1})
+
+\end{aligned}
+$$
+
+### 更新
+
+
+$$
+\begin{aligned}
+
+K =& \check{\Sigma}_k {A^z_k}^T (A^z_k \check{\Sigma}_k {A^z_k}^T + \Sigma^{b^z})^{-1} \\
+
+\mu_k =& \check{\mu}_{k-1} + K (z_k - A^z_k \check{\mu}_{k-1}) \\
+
+\Sigma_k =& (I - K A^z_k) \check{\Sigma}_k
+
+\end{aligned}
 $$
 
 # 性质
