@@ -62,7 +62,7 @@ $$
 
 联合概率 $p(a,b) \sim \mathcal{N}(\mu = [\mu_a; \mu_b], \Sigma = [\Sigma_{aa}, \Sigma_{ab}; \Sigma_{ba}, \Sigma_{bb}])$
 
-则有边缘分布 $p(a) = \int p(a|b) \cdot p(b) \mathrm{d}b \sim \mathcal{N}(\mu_a, \Sigma_{aa})$
+则有边缘分布 $p(a) = \int p(a \vert b) \cdot p(b) \mathrm{d}b \sim \mathcal{N}(\mu_a, \Sigma_{aa})$
 
 $$
 p(x_k | Z_{0:k-1}, U_{0:k}, x_0) = \int p(x_k | u_k, x_{k-1}) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1}
