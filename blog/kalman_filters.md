@@ -126,7 +126,7 @@ $$
 \Sigma^{-1}_k = {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \check{\Sigma}_k^{-1}
 $$
 
-设
+设（卡尔曼增益）
 
 $$
 \begin{aligned}
@@ -182,7 +182,6 @@ K =& \check{\Sigma}_k {A^z_k}^T (A^z_k \check{\Sigma}_k {A^z_k}^T + \Sigma^{b^z}
 \end{aligned}
 $$
 
----
 
 # 性质
 
