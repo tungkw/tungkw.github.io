@@ -167,7 +167,7 @@ $$
 \end{aligned}
 $$
 
-### 整合（apdate step）
+### 整合（update step）
 
 
 $$
