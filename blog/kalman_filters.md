@@ -52,7 +52,7 @@ p(x_k | x_{k-1}, Z_{0:k-1}, U_{0:k}, x_0) = p(x_k | u_k, x_{k-1})
 $$
 
 
-### 高斯线性运动模型（预测）
+### 高斯线性运动模型（predict step）
 
 $$
 x_k = A^x_k x_{k-1} + u_k + b^x_k
@@ -167,7 +167,7 @@ $$
 \end{aligned}
 $$
 
-### 更新
+### 整合（update step）
 
 
 $$
@@ -181,6 +181,8 @@ K =& \check{\Sigma}_k {A^z_k}^T (A^z_k \check{\Sigma}_k {A^z_k}^T + \Sigma^{b^z}
 
 \end{aligned}
 $$
+
+---
 
 # 性质
 
