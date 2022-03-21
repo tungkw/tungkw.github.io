@@ -1,11 +1,11 @@
-{%- include header_latex.html -%}
+{%- inclade header_latex.html -%}
 
 # 定义
 
-- 状态 $S_{0:k} = \{s_0, s_1, \cdots , s_k\}$
-- 动作 $A_{0:k} = \{a_0, a_1, \cdots , a_k\}$
-- 观测 $O_{0:k} = \{0_0, 0_1, \cdots , 0_k\}$
-- 路标 $L = \{l_0, l_1, \cdots , l_n\}$
+- 状态 $S_{0:k} = \left\{s_0, s_1, \cdots, s_k\right\}$
+- 动作 $A_{0:k} = \left\{a_0, a_1, \cdots , a_k\right\}$
+- 观测 $O_{0:k} = \left\{o_0, o_1, \cdots , o_k\right\}$
+- 路标 $L = \left\{l_0, l_1, \cdots , l_n\right\}$
 
 # 问题
 
@@ -30,8 +30,8 @@ $$
 
 $$
 \begin{aligned}
-& p(x_k | Z_{0:k}, U_{0:k}, x_0) \\
-\propto \ & p(z_k | Z_{0:k}, U_{0:k}, x_k, x_0) \cdot p(x_k | Z_{0:k-1}, U_{0:k}, x_0)
+& p(x_k | O_{0:k}, A_{0:k}, x_0) \\
+\propto \ & p(o_k | O_{0:k-1}, A_{0:k}, x_k, x_0) \cdot p(x_k | O_{0:k-1}, A_{0:k}, x_0)
 \end{aligned}
 $$
 
@@ -42,28 +42,28 @@ $$
 以$k-1$时刻状态的条件概率展开先验概率
 
 $$
-p(x_k | Z_{0:k-1}, U_{0:k}, x_0) = \int p(x_k | x_{k-1}, Z_{0:k-1}, U_{0:k}, x_0) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1}
+p(x_k | O_{0:k-1}, A_{0:k}, x_0) = \int p(x_k | x_{k-1}, O_{0:k-1}, A_{0:k}, x_0) \cdot p(x_{k-1} | O_{0:k-1}, A_{0:k}, x_0) \mathrm{d}x_{k-1}
 $$
 
 假设当前状态之和前一时刻状态、当前运动有关
 
 $$
-p(x_k | x_{k-1}, Z_{0:k-1}, U_{0:k}, x_0) = p(x_k | u_k, x_{k-1})
+p(x_k | x_{k-1}, O_{0:k-1}, A_{0:k}, x_0) = p(x_k | a_k, x_{k-1})
 $$
 
 
 ### 高斯线性运动模型（predict step）
 
 $$
-x_k = A^x_k x_{k-1} + u_k + b^x_k
+x_k = W^x_k x_{k-1} + a_k + b^x_k
 $$
 
 使用均值作为前一时刻状态的估计 $x_{k-1} = \mu_{k-1}$
 
 $$
 \begin{aligned}
-x_k =& A^x_k \mu_{k-1} + u_k + b^x_k \\
-\sim& \mathcal{N} (A^x_k \mu_{k-1} + u_k, A^x_k \Sigma_{k-1} {A^x_k}^T + \Sigma^{b^x}) \\
+x_k =& W^x_k \mu_{k-1} + a_k + b^x_k \\
+\sim& \mathcal{N} (W^x_k \mu_{k-1} + a_k, W^x_k \Sigma_{k-1} {W^x_k}^T + \Sigma^{b^x}) \\
 =& \mathcal{N} (\check{\mu}_k, \check{\Sigma}_k)
 \end{aligned} 
 $$
@@ -72,9 +72,9 @@ $$
 
 $$
 \begin{aligned}
-p(x_k | Z_{0:k-1}, U_{0:k}, x_0) &= \int p(x_k | u_k, x_{k-1}) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1} \\
-&= p(x_k | u_k, x_{k-1}) \int p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1} \\
-&= p(x_k | u_k, x_{k-1})
+p(x_k | O_{0:k-1}, A_{0:k}, x_0) &= \int p(x_k | a_k, x_{k-1}) \cdot p(x_{k-1} | O_{0:k-1}, A_{0:k}, x_0) \mathrm{d}x_{k-1} \\
+&= p(x_k | a_k, x_{k-1}) \int p(x_{k-1} | O_{0:k-1}, A_{0:k}, x_0) \mathrm{d}x_{k-1} \\
+&= p(x_k | a_k, x_{k-1})
 \end{aligned}
 $$
 
@@ -86,15 +86,15 @@ $$
 每次观测独立，且和动作无关
 
 $$
-p(z_k | Z_{0:k}, U_{0:k}, x_k, x_0) = p(z_k | x_k)
+p(o_k | O_{0:k-1}, A_{0:k}, x_k, x_0) = p(o_k | x_k)
 $$
 
 ### 高斯线性观测模型
 
 $$
 \begin{aligned}
-z_k =& A^z_k x_k + b^z_k \\
-\sim& \mathcal{N} (A^z_k x_k, \Sigma^{b^z})
+o_k =& W^o_k x_k + b^o_k \\
+\sim& \mathcal{N} (W^o_k x_k, \Sigma^{b^o})
 \end{aligned}
 $$
 
@@ -105,8 +105,8 @@ $$
 
 $$
 \begin{aligned}
-& p(x_k | Z_{0:k}, U_{0:k}, x_0) \\
-\propto \ & p(z_k | x_k) \cdot p(x_k | u_k, x_{k-1})
+& p(x_k | O_{0:k}, A_{0:k}, x_0) \\
+\propto \ & p(o_k | x_k) \cdot p(x_k | a_k, x_{k-1})
 \end{aligned} 
 $$
 
@@ -115,7 +115,7 @@ $$
 $$
 \begin{aligned}
 &(x_k - \mu_k)^T \Sigma^{-1}_k (x_k - \mu_k) \\
-=& (z_k - A^z_k x_k)^T (\Sigma^{b^z})^{-1} (z_k - A^z_k x_k) \\
+=& (o_k - W^o_k x_k)^T (\Sigma^{b^o})^{-1} (o_k - W^o_k x_k) \\
 +& (x_k - \check{\mu}_{k-1})^T \check{\Sigma}_k^{-1} (x_k - \check{\mu}_{k-1})
 \end{aligned}
 $$
@@ -123,15 +123,15 @@ $$
 ### 二次项系数有
 
 $$
-\Sigma^{-1}_k = {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \check{\Sigma}_k^{-1}
+\Sigma^{-1}_k = {W^o_k}^T (\Sigma^{b^o})^{-1} W^o_k + \check{\Sigma}_k^{-1}
 $$
 
 设（卡尔曼增益）
 
 $$
 \begin{aligned}
-K =& \Sigma_k {A^z_k}^T (\Sigma^{b^z})^{-1} \\
-(woodbury\ identity) =& \check{\Sigma}_k {A^z_k}^T (A^z_k \check{\Sigma}_k {A^z_k}^T + \Sigma^{b^z})^{-1}
+K =& \Sigma_k {W^o_k}^T (\Sigma^{b^o})^{-1} \\
+(woodbary\ identity) =& \check{\Sigma}_k {W^o_k}^T (W^o_k \check{\Sigma}_k {W^o_k}^T + \Sigma^{b^o})^{-1}
 \end{aligned}
 $$
 
@@ -139,13 +139,13 @@ $$
 
 $$
 \begin{aligned}
-\Sigma^{-1}_k &= {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \check{\Sigma}_k^{-1} \\
+\Sigma^{-1}_k &= {W^o_k}^T (\Sigma^{b^o})^{-1} W^o_k + \check{\Sigma}_k^{-1} \\
 
-I &= \Sigma_k {A^z_k}^T (\Sigma^{b^z})^{-1} A^z_k + \Sigma_k \check{\Sigma}_k^{-1} \\
+I &= \Sigma_k {W^o_k}^T (\Sigma^{b^o})^{-1} W^o_k + \Sigma_k \check{\Sigma}_k^{-1} \\
 
-I &= K A^z_k + \Sigma_k \check{\Sigma}_k^{-1} \\
+I &= K W^o_k + \Sigma_k \check{\Sigma}_k^{-1} \\
 
-\Sigma_k &= (I - K A^z_k) \check{\Sigma}_k
+\Sigma_k &= (I - K W^o_k) \check{\Sigma}_k
 \end{aligned}
 $$
 
@@ -154,30 +154,30 @@ $$
 $$
 \begin{aligned}
 - \mu_k^T \Sigma^{-1}_k x_k 
-=& - z_k^T (\Sigma^{b^z})^{-1} A^z_k x_k - \check{\mu}_{k-1}^T \check{\Sigma}_k^{-1} x_k \\
+=& - o_k^T (\Sigma^{b^o})^{-1} W^o_k x_k - \check{\mu}_{k-1}^T \check{\Sigma}_k^{-1} x_k \\
 
-\Sigma^{-1}_k \mu_k =& {A^z_k}^T (\Sigma^{b^z})^{-1} z_k + \check{\Sigma}_k^{-1} \check{\mu}_{k-1} \\
+\Sigma^{-1}_k \mu_k =& {W^o_k}^T (\Sigma^{b^o})^{-1} o_k + \check{\Sigma}_k^{-1} \check{\mu}_{k-1} \\
 
-\mu_k =& \Sigma_k {A^z_k}^T (\Sigma^{b^z})^{-1} z_k + \Sigma_k \check{\Sigma}_k^{-1} \check{\mu}_{k-1} \\
+\mu_k =& \Sigma_k {W^o_k}^T (\Sigma^{b^o})^{-1} o_k + \Sigma_k \check{\Sigma}_k^{-1} \check{\mu}_{k-1} \\
 
-\mu_k =& K z_k + (I - K A^z_k)\check{\mu}_{k-1} \\
+\mu_k =& K o_k + (I - K W^o_k)\check{\mu}_{k-1} \\
 
-\mu_k =& \check{\mu}_{k-1} + K (z_k - A^z_k \check{\mu}_{k-1})
+\mu_k =& \check{\mu}_{k-1} + K (o_k - W^o_k \check{\mu}_{k-1})
 
 \end{aligned}
 $$
 
-### 整合（update step）
+### 整合（apdate step）
 
 
 $$
 \begin{aligned}
 
-K =& \check{\Sigma}_k {A^z_k}^T (A^z_k \check{\Sigma}_k {A^z_k}^T + \Sigma^{b^z})^{-1} \\
+K =& \check{\Sigma}_k {W^o_k}^T (W^o_k \check{\Sigma}_k {W^o_k}^T + \Sigma^{b^o})^{-1} \\
 
-\mu_k =& \check{\mu}_{k-1} + K (z_k - A^z_k \check{\mu}_{k-1}) \\
+\mu_k =& \check{\mu}_{k-1} + K (o_k - W^o_k \check{\mu}_{k-1}) \\
 
-\Sigma_k =& (I - K A^z_k) \check{\Sigma}_k
+\Sigma_k =& (I - K W^o_k) \check{\Sigma}_k
 
 \end{aligned}
 $$
