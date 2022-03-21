@@ -11,11 +11,13 @@
 
 给定：观测序列，动作序列，初始状态
 求解：当前状态，路标
+
 $$
 p(s_k, L | O_{0:k}, A_{0:k}, s_0)
 $$
 
 将$s_k$和$L$合并成$x_k$
+
 $$
 p(x_k | O_{0:k}, A_{0:k}, x_0)
 $$
@@ -58,9 +60,9 @@ $$
 
 ## 边缘高斯分布
 
-联合概率$p(a,b) \sim \mathcal{N}(\mu = [\mu_a; \mu_b], \Sigma = [\Sigma_{aa}, \Sigma_{ab}; \Sigma_{ba}, \Sigma_{bb}])$
+联合概率 $p(a,b) \sim \mathcal{N}(\mu = [\mu_a; \mu_b], \Sigma = [\Sigma_{aa}, \Sigma_{ab}; \Sigma_{ba}, \Sigma_{bb}])$
 
-则有边缘分布$p(a) = \int p(a|b) \cdot p(b) \mathrm{d}b \sim \mathcal{N}(\mu_a, \Sigma_{aa})$
+则有边缘分布 $p(a) = \int p(a|b) \cdot p(b) \mathrm{d}b \sim \mathcal{N}(\mu_a, \Sigma_{aa})$
 
 $$
 p(x_k | Z_{0:k-1}, U_{0:k}, x_0) = \int p(x_k | u_k, x_{k-1}) \cdot p(x_{k-1} | Z_{0:k-1}, U_{0:k}, x_0) \mathrm{d}x_{k-1}
